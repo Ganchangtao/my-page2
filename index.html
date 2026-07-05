@@ -1,58 +1,631 @@
 <!DOCTYPE html>
-        <html lang="zh">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>美术与设计类 · 志愿表</title>
-            <style>
-                * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif; }
-                body { background: #f2f6fc; padding: 20px; display: flex; justify-content: center; }
-                .container { max-width: 1200px; width: 100%; background: white; border-radius: 24px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); padding: 20px; overflow: hidden; }
-                .card-header { padding-bottom: 12px; border-bottom: 2px solid #e6edf6; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
-                .card-header h2 { font-size: 18px; color: #1a2b4c; }
-                .badge-count { background: #d3deed; padding: 4px 12px; border-radius: 40px; font-size: 12px; color: #0a1f38; }
-                .footer-note { margin-top: 20px; padding: 10px 14px; background: #eef3f8; border-radius: 40px; font-size: 12px; color: #1e3349; text-align: center; }
-                .city-group { margin-top: 16px; }
-                .city-label { background: #d3deed; padding: 6px 14px; border-radius: 40px; font-weight: 700; font-size: 14px; color: #0a1f38; display: inline-block; margin-bottom: 8px; }
-                .table-wrapper { overflow-x: auto; border-radius: 12px; border: 1px solid #e6edf6; }
-                table { width: 100%; border-collapse: collapse; font-size: 11px; min-width: 900px; }
-                th { background: #1a2b4c; color: white; font-weight: 600; padding: 6px 3px; text-align: center; border: 1px solid #2c3e6b; white-space: nowrap; font-size: 10px; }
-                td { border: 1px solid #d9e1ec; padding: 4px 3px; text-align: center; vertical-align: middle; background: white; font-size: 11px; }
-                tr:nth-child(even) td { background-color: #f8faff; }
-                .city-wuhan td { background-color: #e1f0fa; }
-                .city-wuhan tr:nth-child(even) td { background-color: #d6e8f5; }
-                .city-zhengzhou td { background-color: #f0f4e8; }
-                .city-zhengzhou tr:nth-child(even) td { background-color: #e8efdd; }
-                .city-kaifeng td { background-color: #fef7e0; }
-                .city-kaifeng tr:nth-child(even) td { background-color: #fcf2d0; }
-                .city-xinyang td { background-color: #fce9e6; }
-                .city-xinyang tr:nth-child(even) td { background-color: #f8dfda; }
-                .city-other td { background-color: #f2f2f2; }
-                .city-other tr:nth-child(even) td { background-color: #eaeaea; }
-                .score-cell { font-weight: 600; color: #1d4e7c; }
-                .fee-cell { font-weight: 500; color: #0a3a5a; }
-                .tag-cell { font-size: 10px; }
-                .tag-cell .tag { display: inline-block; padding: 1px 8px; border-radius: 30px; font-size: 10px; font-weight: 500; }
-                .tag-cell .tag-highlight { background: #fff3cd; color: #856404; }
-                .tag-cell .tag-level { background: #d1ecf1; color: #0c5460; }
-                .tag-cell .tag-normal { background: #e2e3e5; color: #383d41; }
-                .district-cell { font-size: 10px; color: #3a5a78; font-weight: 500; }
-                .row-order { font-size: 10px; color: #8a9baa; font-weight: 500; }
-                @media (max-width: 768px) {
-                    table { font-size: 10px; min-width: 700px; }
-                    th { font-size: 9px; padding: 4px 2px; }
-                    td { font-size: 10px; padding: 3px 2px; }
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>美术与设计类 · 志愿表（含招生人数）</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+        body {
+            background: #f2f6fc;
+            padding: 12px 8px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            padding: 12px 8px;
+            overflow: hidden;
+        }
+        .card-header {
+            padding: 6px 12px 12px 12px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a2b4c;
+            border-bottom: 2px solid #e6edf6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .badge-count {
+            background: #d3deed;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #0a1f38;
+        }
+        .footer-note {
+            margin-top: 20px;
+            padding: 10px 14px;
+            background: #eef3f8;
+            border-radius: 40px;
+            font-size: 12px;
+            color: #1e3349;
+            text-align: center;
+        }
+        .city-group {
+            margin-top: 16px;
+        }
+        .city-label {
+            background: #d3deed;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 14px;
+            color: #0a1f38;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+        .table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 12px;
+            border: 1px solid #e6edf6;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            min-width: 1150px;
+        }
+        th {
+            background: #1a2b4c;
+            color: white;
+            font-weight: 600;
+            padding: 6px 3px;
+            text-align: center;
+            border: 1px solid #2c3e6b;
+            white-space: nowrap;
+            font-size: 10px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        th:nth-child(1) {
+            width: 30px;
+            min-width: 30px;
+        }
+        td {
+            border: 1px solid #d9e1ec;
+            padding: 4px 3px;
+            text-align: center;
+            vertical-align: middle;
+            background: white;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+        tr:nth-child(even) td {
+            background-color: #f8faff;
+        }
+        .city-wuhan td { background-color: #e1f0fa; }
+        .city-wuhan tr:nth-child(even) td { background-color: #d6e8f5; }
+        .city-zhengzhou td { background-color: #f0f4e8; }
+        .city-zhengzhou tr:nth-child(even) td { background-color: #e8efdd; }
+        .city-kaifeng td { background-color: #fef7e0; }
+        .city-kaifeng tr:nth-child(even) td { background-color: #fcf2d0; }
+        .city-xinyang td { background-color: #fce9e6; }
+        .city-xinyang tr:nth-child(even) td { background-color: #f8dfda; }
+        .city-other td { background-color: #f2f2f2; }
+        .city-other tr:nth-child(even) td { background-color: #eaeaea; }
+        .score-cell {
+            font-weight: 600;
+            color: #1d4e7c;
+        }
+        .fee-cell {
+            font-weight: 500;
+            color: #0a3a5a;
+        }
+        .tag-cell {
+            font-size: 10px;
+        }
+        .tag-cell .tag {
+            display: inline-block;
+            padding: 1px 8px;
+            border-radius: 30px;
+            font-size: 10px;
+            font-weight: 500;
+        }
+        .tag-cell .tag-highlight {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .tag-cell .tag-level {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        .tag-cell .tag-normal {
+            background: #e2e3e5;
+            color: #383d41;
+        }
+        .district-cell {
+            font-size: 10px;
+            color: #3a5a78;
+            font-weight: 500;
+        }
+        .row-order {
+            font-size: 10px;
+            color: #8a9baa;
+            font-weight: 500;
+        }
+        .plan-cell {
+            font-weight: 600;
+            color: #c0392b;
+        }
+
+        @media (max-width: 768px) {
+            .card-header { font-size: 14px; }
+            table { font-size: 10px; min-width: 950px; }
+            th { font-size: 9px; padding: 4px 2px; }
+            td { font-size: 10px; padding: 3px 2px; }
+        }
+        @media (max-width: 480px) {
+            .card-header { font-size: 13px; }
+            table { font-size: 9px; min-width: 800px; }
+            th { font-size: 8px; padding: 3px 1px; }
+            td { font-size: 9px; padding: 2px 1px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card-header">
+        <span>🎨 美术与设计类 · 志愿表（含招生人数）</span>
+        <span class="badge-count" id="countBadge">0 条</span>
+    </div>
+    <div id="viewContainer"></div>
+    <div class="footer-note">
+        📋 共 <span id="footerCount">0</span> 条志愿 · 计划数来源于2026年招生计划
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ===== 院校信息 =====
+        const schoolInfo = {
+            '武汉船舶职业技术学院': { tag: '高水平学校C', level: '', district: '汉阳区' },
+            '武汉警官职业学院': { tag: '省属', level: '省属', district: '东西湖区' },
+            '湖北生态工程职业技术学院': { tag: '省属', level: '省属', district: '江夏区' },
+            '湖北交通职业技术学院': { tag: '高水平专业群C', level: '', district: '洪山区' },
+            '湖北国土资源职业学院': { tag: '省属', level: '省属', district: '汉南区' },
+            '河南职业技术学院': { tag: '高水平专业群B', level: '', district: '金水区' },
+            '河南工业贸易职业学院': { tag: '省属', level: '省属', district: '管城回族区' },
+            '郑州幼儿师范高等专科学校': { tag: '省属', level: '省属', district: '郑东新区' },
+            '河南测绘职业学院': { tag: '省属', level: '省属', district: '郑东新区' },
+            '河南艺术职业学院': { tag: '省属', level: '省属', district: '郑东新区' },
+            '河南财政金融学院': { tag: '省属', level: '省属', district: '郑东新区' },
+            '河南建筑职业技术学院': { tag: '省属', level: '省属', district: '二七区' },
+            '河南机电职业学院': { tag: '省属', level: '省属', district: '新郑市' },
+            '河南轻工职业学院': { tag: '', level: '', district: '金水区' },
+            '郑州职业技术学院': { tag: '', level: '', district: '荥阳市' },
+            '河南地矿职业学院': { tag: '', level: '', district: '郑东新区' },
+            '河南信息统计职业学院': { tag: '', level: '', district: '郑东新区' },
+            '开封大学': { tag: '省重点', level: '省重点', district: '龙亭区' },
+            '开封文化艺术职业学院': { tag: '省属', level: '省属', district: '龙亭区' },
+            '信阳农林学院': { tag: '省属', level: '省属', district: '平桥区' },
+            '信阳艺术职业学院': { tag: '', level: '', district: '平桥区' },
+            '河南林业职业学院': { tag: '省属', level: '省属', district: '瀍河区' },
+            '河南对外经济贸易职业学院': { tag: '', level: '', district: '龙亭区' },
+            '兰考三农职业学院': { tag: '', level: '', district: '兰考县' },
+            '洛阳文化旅游职业学院': { tag: '', level: '', district: '洛阳市' },
+            '南阳农业职业学院': { tag: '省属', level: '省属', district: '南阳市' },
+            '河南物流职业学院': { tag: '', level: '', district: '新乡市' },
+            '新乡职业技术学院': { tag: '省属', level: '省属', district: '新乡市' },
+            '武汉商贸职业学院': { tag: '民办', level: '', district: '洪山区' },
+            '南阳工艺美术职业学院': { tag: '', level: '', district: '南阳市' },
+            '南阳科技职业学院': { tag: '', level: '', district: '南阳市' },
+            '平顶山职业技术学院': { tag: '', level: '', district: '平顶山市' },
+            '三门峡职业技术学院': { tag: '', level: '', district: '三门峡市' },
+            '平顶山工业职业技术学院': { tag: '省属', level: '省属', district: '平顶山市' },
+            '周口理工职业学院': { tag: '', level: '', district: '周口市' },
+            '周口职业技术学院': { tag: '', level: '', district: '周口市' }
+        };
+
+        // ===== 计划招生人数 =====
+        const planMap = {
+            '武汉船舶职业技术学院_视觉传达设计_01': 2,
+            '武汉船舶职业技术学院_产品艺术设计_02': 2,
+            '武汉船舶职业技术学院_环境艺术设计_03': 2,
+            '武汉警官职业学院_摄影摄像技术_01': 9,
+            '湖北生态工程职业技术学院_艺术设计_01': 3,
+            '湖北交通职业技术学院_环境艺术设计_01': 5,
+            '湖北国土资源职业学院_数字媒体艺术设计_01': 2,
+            '河南职业技术学院_产品艺术设计_02': 32,
+            '河南工业贸易职业学院_数字媒体艺术设计_02': 20,
+            '郑州幼儿师范高等专科学校_数字媒体艺术设计_02': 15,
+            '河南工业贸易职业学院_视觉传达设计_01': 18,
+            '河南测绘职业学院_视觉传达设计_01': 30,
+            '河南艺术职业学院_游戏艺术设计_09': 11,
+            '河南艺术职业学院_影视动画_25': 8,
+            '河南工业贸易职业学院_工艺美术品设计_03': 20,
+            '河南艺术职业学院_舞台艺术设计与制作_23': 9,
+            '河南财政金融学院_摄影摄像技术_03': 20,
+            '河南艺术职业学院_环境艺术设计_05': 9,
+            '河南建筑职业技术学院_环境艺术设计_01': 10,
+            '河南机电职业学院_动漫设计_03': 40,
+            '河南机电职业学院_环境艺术设计_02': 22,
+            '河南艺术职业学院_广告艺术设计_11': 4,
+            '河南机电职业学院_产品艺术设计_01': 9,
+            '河南艺术职业学院_人物形象设计_12': 8,
+            '河南轻工职业学院_视觉传达设计_02': 10,
+            '河南轻工职业学院_艺术设计_01': 12,
+            '河南轻工职业学院_产品艺术设计_06': 25,
+            '河南轻工职业学院_工艺美术品设计_10': 5,
+            '河南轻工职业学院_公共艺术设计_08': 20,
+            '河南轻工职业学院_展示艺术设计_09': 20,
+            '河南轻工职业学院_广告艺术设计_11': 10,
+            '河南工业贸易职业学院_广告艺术设计_04': 2,
+            '河南轻工职业学院_环境艺术设计_07': 10,
+            '郑州职业技术学院_环境艺术设计_01': 21,
+            '河南地矿职业学院_环境艺术设计_01': 30,
+            '河南轻工职业学院_室内艺术设计_12': 10,
+            '河南信息统计职业学院_室内艺术设计_02': 15,
+            '郑州职业技术学院_人物形象设计_03': 13,
+            '开封大学_视觉传达设计_01': 108,
+            '开封大学_环境艺术设计_03': 25,
+            '开封大学_服装与服饰设计_02': 22,
+            '开封文化艺术职业学院_工艺美术品设计_02': 13,
+            '信阳农林学院_数字媒体艺术设计_05': 30,
+            '信阳艺术职业学院_数字媒体艺术设计_02': 20,
+            '信阳农林学院_艺术设计_04': 30,
+            '信阳艺术职业学院_艺术设计_01': 8,
+            '信阳艺术职业学院_书画艺术_03': 2,
+            '河南林业职业学院_动漫设计_05': 4,
+            '河南林业职业学院_环境艺术设计_03': 10,
+            '河南对外经济贸易职业学院_视觉传达设计_01': 50,
+            '兰考三农职业学院_产品艺术设计_01': 35,
+            '洛阳文化旅游职业学院_视觉传达设计_02': 6,
+            '洛阳文化旅游职业学院_视觉传达设计(虚拟现实制作方向)_03': 11,
+            '洛阳文化旅游职业学院_艺术设计(时尚形象设计方向)_01': 3,
+            '南阳农业职业学院_艺术设计_01': 10,
+            '河南物流职业学院_视觉传达设计_01': 8,
+            '新乡职业技术学院_视觉传达设计_01': 24,
+            '武汉商贸职业学院_视觉传达设计_02': 4,
+            '武汉商贸职业学院_服装与服饰设计_03': 2,
+            '南阳工艺美术职业学院_数字媒体艺术设计_03': 15,
+            '南阳工艺美术职业学院_艺术设计_01': 14,
+            '南阳科技职业学院_视觉传达设计_02': 4,
+            '南阳科技职业学院_艺术设计_01': 9,
+            '平顶山职业技术学院_产品艺术设计_01': 3
+        };
+
+        // ===== 分数数据 =====
+        const scoreMap = {
+            '武汉船舶职业技术学院_视觉传达设计_01': '421.75',
+            '武汉船舶职业技术学院_产品艺术设计_02': '415.75',
+            '武汉船舶职业技术学院_环境艺术设计_03': '403.5',
+            '武汉警官职业学院_摄影摄像技术_01': '404.5',
+            '湖北生态工程职业技术学院_艺术设计_01': '408.75',
+            '湖北交通职业技术学院_环境艺术设计_01': '404.25',
+            '湖北国土资源职业学院_数字媒体艺术设计_01': '426.5',
+            '河南职业技术学院_产品艺术设计_02': '432.75',
+            '河南工业贸易职业学院_数字媒体艺术设计_02': '412.5',
+            '郑州幼儿师范高等专科学校_数字媒体艺术设计_02': '386.5',
+            '河南工业贸易职业学院_视觉传达设计_01': '404.5',
+            '河南测绘职业学院_视觉传达设计_01': '384.5',
+            '河南艺术职业学院_游戏艺术设计_09': '417.25',
+            '河南艺术职业学院_影视动画_25': '413.75',
+            '河南工业贸易职业学院_工艺美术品设计_03': '394.5',
+            '河南艺术职业学院_舞台艺术设计与制作_23': '392.5',
+            '河南财政金融学院_摄影摄像技术_03': '425',
+            '河南艺术职业学院_环境艺术设计_05': '408.5',
+            '河南建筑职业技术学院_环境艺术设计_01': '394.75',
+            '河南机电职业学院_动漫设计_03': '379',
+            '河南机电职业学院_环境艺术设计_02': '381.75',
+            '河南艺术职业学院_广告艺术设计_11': '423.25',
+            '河南机电职业学院_产品艺术设计_01': '384.5',
+            '河南艺术职业学院_人物形象设计_12': '407.25',
+            '河南轻工职业学院_视觉传达设计_02': '429',
+            '河南轻工职业学院_艺术设计_01': '412',
+            '河南轻工职业学院_产品艺术设计_06': '400.25',
+            '河南轻工职业学院_工艺美术品设计_10': '369.5',
+            '河南轻工职业学院_公共艺术设计_08': '388',
+            '河南轻工职业学院_展示艺术设计_09': '345.25',
+            '河南轻工职业学院_广告艺术设计_11': '388',
+            '河南工业贸易职业学院_广告艺术设计_04': '358',
+            '河南轻工职业学院_环境艺术设计_07': '388',
+            '郑州职业技术学院_环境艺术设计_01': '384.5',
+            '河南地矿职业学院_环境艺术设计_01': '342',
+            '河南轻工职业学院_室内艺术设计_12': '369.25',
+            '河南信息统计职业学院_室内艺术设计_02': '342.5',
+            '郑州职业技术学院_人物形象设计_03': '394',
+            '开封大学_视觉传达设计_01': '433.75',
+            '开封大学_环境艺术设计_03': '418.5',
+            '开封大学_服装与服饰设计_02': '418',
+            '开封文化艺术职业学院_工艺美术品设计_02': '335.25',
+            '信阳农林学院_数字媒体艺术设计_05': '424',
+            '信阳艺术职业学院_数字媒体艺术设计_02': '399',
+            '信阳农林学院_艺术设计_04': '415.5',
+            '信阳艺术职业学院_艺术设计_01': '391',
+            '信阳艺术职业学院_书画艺术_03': '363.5',
+            '河南林业职业学院_动漫设计_05': '407.25',
+            '河南林业职业学院_环境艺术设计_03': '402.5',
+            '河南对外经济贸易职业学院_视觉传达设计_01': '370.5',
+            '兰考三农职业学院_产品艺术设计_01': '368.5',
+            '洛阳文化旅游职业学院_视觉传达设计_02': '355.25',
+            '洛阳文化旅游职业学院_视觉传达设计(虚拟现实制作方向)_03': '355.25',
+            '洛阳文化旅游职业学院_艺术设计(时尚形象设计方向)_01': '357.5',
+            '南阳农业职业学院_艺术设计_01': '329.5',
+            '河南物流职业学院_视觉传达设计_01': '371.75',
+            '新乡职业技术学院_视觉传达设计_01': '327',
+            '武汉商贸职业学院_视觉传达设计_02': '354.5',
+            '武汉商贸职业学院_服装与服饰设计_03': '345.75',
+            '南阳工艺美术职业学院_数字媒体艺术设计_03': '336',
+            '南阳工艺美术职业学院_艺术设计_01': '327.5',
+            '南阳科技职业学院_视觉传达设计_02': '363.75',
+            '南阳科技职业学院_艺术设计_01': '362.5',
+            '平顶山职业技术学院_产品艺术设计_01': '315.75'
+        };
+
+        // ===== 城市映射 =====
+        const cityMap = {
+            '武汉船舶职业技术学院': '武汉市',
+            '武汉警官职业学院': '武汉市',
+            '湖北生态工程职业技术学院': '武汉市',
+            '湖北交通职业技术学院': '武汉市',
+            '湖北国土资源职业学院': '武汉市',
+            '武汉商贸职业学院': '武汉市',
+            '河南职业技术学院': '郑州市',
+            '河南工业贸易职业学院': '郑州市',
+            '郑州幼儿师范高等专科学校': '郑州市',
+            '河南测绘职业学院': '郑州市',
+            '河南艺术职业学院': '郑州市',
+            '河南财政金融学院': '郑州市',
+            '河南建筑职业技术学院': '郑州市',
+            '河南机电职业学院': '郑州市',
+            '河南轻工职业学院': '郑州市',
+            '郑州职业技术学院': '郑州市',
+            '河南地矿职业学院': '郑州市',
+            '河南信息统计职业学院': '郑州市',
+            '开封大学': '开封市',
+            '开封文化艺术职业学院': '开封市',
+            '河南对外经济贸易职业学院': '开封市',
+            '兰考三农职业学院': '开封市兰考县',
+            '信阳农林学院': '信阳市',
+            '信阳艺术职业学院': '信阳市',
+            '河南林业职业学院': '洛阳市',
+            '河南物流职业学院': '新乡市',
+            '洛阳文化旅游职业学院': '洛阳市',
+            '南阳农业职业学院': '南阳市',
+            '新乡职业技术学院': '新乡市',
+            '南阳工艺美术职业学院': '南阳市',
+            '南阳科技职业学院': '南阳市',
+            '平顶山职业技术学院': '平顶山市',
+            '平顶山工业职业技术学院': '平顶山市',
+            '周口理工职业学院': '周口市',
+            '周口职业技术学院': '周口市',
+            '三门峡职业技术学院': '三门峡市'
+        };
+
+        // ===== 城市分组配置（哪些城市归入哪个分组） =====
+        function getGroupInfo(city, name) {
+            // 武汉：只包含公办院校，武汉商贸职业学院除外
+            if (city === '武汉市' && name !== '武汉商贸职业学院') {
+                return { key: 'wuhan', label: '📍 武汉 · 公办院校', cls: 'city-wuhan' };
+            }
+            // 郑州
+            if (city === '郑州市') {
+                return { key: 'zhengzhou', label: '📍 郑州 · 市辖区', cls: 'city-zhengzhou' };
+            }
+            // 开封（仅开封大学和开封文化艺术职业学院）
+            if (city === '开封市' && (name === '开封大学' || name === '开封文化艺术职业学院')) {
+                return { key: 'kaifeng', label: '📍 开封 · 市辖区', cls: 'city-kaifeng' };
+            }
+            // 信阳
+            if (city === '信阳市') {
+                return { key: 'xinyang', label: '📍 信阳 · 市辖区', cls: 'city-xinyang' };
+            }
+            // 其他所有城市（包括兰考县、新乡市、洛阳市、南阳市、平顶山市、三门峡市、周口市、武汉商贸职业学院等）
+            return { key: 'other', label: '📍 其他城市', cls: 'city-other' };
+        }
+
+        // ===== 严格按照PDF顺序构建64条数据 =====
+        function buildPDFOrderData() {
+            const pdfItems = [
+                // 序号1-7：武汉公办
+                { code: '8849', name: '武汉船舶职业技术学院', major: '视觉传达设计', majorCode: '01' },
+                { code: '8849', name: '武汉船舶职业技术学院', major: '产品艺术设计', majorCode: '02' },
+                { code: '8849', name: '武汉船舶职业技术学院', major: '环境艺术设计', majorCode: '03' },
+                { code: '8852', name: '武汉警官职业学院', major: '摄影摄像技术', majorCode: '01' },
+                { code: '9784', name: '湖北生态工程职业技术学院', major: '艺术设计', majorCode: '01' },
+                { code: '8847', name: '湖北交通职业技术学院', major: '环境艺术设计', majorCode: '01' },
+                { code: '9782', name: '湖北国土资源职业学院', major: '数字媒体艺术设计', majorCode: '01' },
+                // 序号8-38：郑州
+                { code: '6261', name: '河南职业技术学院', major: '产品艺术设计', majorCode: '02' },
+                { code: '6289', name: '河南工业贸易职业学院', major: '数字媒体艺术设计', majorCode: '02' },
+                { code: '6231', name: '郑州幼儿师范高等专科学校', major: '数字媒体艺术设计', majorCode: '02' },
+                { code: '6289', name: '河南工业贸易职业学院', major: '视觉传达设计', majorCode: '01' },
+                { code: '6320', name: '河南测绘职业学院', major: '视觉传达设计', majorCode: '01' },
+                { code: '6290', name: '河南艺术职业学院', major: '游戏艺术设计', majorCode: '09' },
+                { code: '6290', name: '河南艺术职业学院', major: '影视动画', majorCode: '25' },
+                { code: '6289', name: '河南工业贸易职业学院', major: '工艺美术品设计', majorCode: '03' },
+                { code: '6290', name: '河南艺术职业学院', major: '舞台艺术设计与制作', majorCode: '23' },
+                { code: '6215', name: '河南财政金融学院', major: '摄影摄像技术', majorCode: '03' },
+                { code: '6290', name: '河南艺术职业学院', major: '环境艺术设计', majorCode: '05' },
+                { code: '6269', name: '河南建筑职业技术学院', major: '环境艺术设计', majorCode: '01' },
+                { code: '6382', name: '河南机电职业学院', major: '动漫设计', majorCode: '03' },
+                { code: '6382', name: '河南机电职业学院', major: '环境艺术设计', majorCode: '02' },
+                { code: '6290', name: '河南艺术职业学院', major: '广告艺术设计', majorCode: '11' },
+                { code: '6382', name: '河南机电职业学院', major: '产品艺术设计', majorCode: '01' },
+                { code: '6290', name: '河南艺术职业学院', major: '人物形象设计', majorCode: '12' },
+                { code: '6184', name: '河南轻工职业学院', major: '视觉传达设计', majorCode: '02' },
+                { code: '6184', name: '河南轻工职业学院', major: '艺术设计', majorCode: '01' },
+                { code: '6184', name: '河南轻工职业学院', major: '产品艺术设计', majorCode: '06' },
+                { code: '6184', name: '河南轻工职业学院', major: '工艺美术品设计', majorCode: '10' },
+                { code: '6184', name: '河南轻工职业学院', major: '公共艺术设计', majorCode: '08' },
+                { code: '6184', name: '河南轻工职业学院', major: '展示艺术设计', majorCode: '09' },
+                { code: '6184', name: '河南轻工职业学院', major: '广告艺术设计', majorCode: '11' },
+                { code: '6289', name: '河南工业贸易职业学院', major: '广告艺术设计', majorCode: '04' },
+                { code: '6184', name: '河南轻工职业学院', major: '环境艺术设计', majorCode: '07' },
+                { code: '6285', name: '郑州职业技术学院', major: '环境艺术设计', majorCode: '01' },
+                { code: '6540', name: '河南地矿职业学院', major: '环境艺术设计', majorCode: '01' },
+                { code: '6184', name: '河南轻工职业学院', major: '室内艺术设计', majorCode: '12' },
+                { code: '6186', name: '河南信息统计职业学院', major: '室内艺术设计', majorCode: '02' },
+                { code: '6285', name: '郑州职业技术学院', major: '人物形象设计', majorCode: '03' },
+                // 序号39-42：开封（开封大学、开封文化艺术职业学院）
+                { code: '6252', name: '开封大学', major: '视觉传达设计', majorCode: '01' },
+                { code: '6252', name: '开封大学', major: '环境艺术设计', majorCode: '03' },
+                { code: '6252', name: '开封大学', major: '服装与服饰设计', majorCode: '02' },
+                { code: '6316', name: '开封文化艺术职业学院', major: '工艺美术品设计', majorCode: '02' },
+                // 序号43-47：信阳
+                { code: '6145', name: '信阳农林学院', major: '数字媒体艺术设计', majorCode: '05' },
+                { code: '6365', name: '信阳艺术职业学院', major: '数字媒体艺术设计', majorCode: '02' },
+                { code: '6145', name: '信阳农林学院', major: '艺术设计', majorCode: '04' },
+                { code: '6365', name: '信阳艺术职业学院', major: '艺术设计', majorCode: '01' },
+                { code: '6365', name: '信阳艺术职业学院', major: '书画艺术', majorCode: '03' },
+                // 序号48-64：其他城市（含河南对外经济贸易职业学院、兰考三农职业学院、武汉商贸职业学院等）
+                { code: '6188', name: '河南林业职业学院', major: '动漫设计', majorCode: '05' },
+                { code: '6188', name: '河南林业职业学院', major: '环境艺术设计', majorCode: '03' },
+                { code: '6354', name: '河南对外经济贸易职业学院', major: '视觉传达设计', majorCode: '01' },
+                { code: '6357', name: '兰考三农职业学院', major: '产品艺术设计', majorCode: '01' },
+                { code: '6363', name: '洛阳文化旅游职业学院', major: '视觉传达设计', majorCode: '02' },
+                { code: '6363', name: '洛阳文化旅游职业学院', major: '视觉传达设计(虚拟现实制作方向)', majorCode: '03' },
+                { code: '6363', name: '洛阳文化旅游职业学院', major: '艺术设计(时尚形象设计方向)', majorCode: '01' },
+                { code: '6380', name: '南阳农业职业学院', major: '艺术设计', majorCode: '01' },
+                { code: '6539', name: '河南物流职业学院', major: '视觉传达设计', majorCode: '01' },
+                { code: '6291', name: '新乡职业技术学院', major: '视觉传达设计', majorCode: '01' },
+                { code: '8866', name: '武汉商贸职业学院', major: '视觉传达设计', majorCode: '02' },
+                { code: '8866', name: '武汉商贸职业学院', major: '服装与服饰设计', majorCode: '03' },
+                { code: '6368', name: '南阳工艺美术职业学院', major: '数字媒体艺术设计', majorCode: '03' },
+                { code: '6368', name: '南阳工艺美术职业学院', major: '艺术设计', majorCode: '01' },
+                { code: '6356', name: '南阳科技职业学院', major: '视觉传达设计', majorCode: '02' },
+                { code: '6356', name: '南阳科技职业学院', major: '艺术设计', majorCode: '01' },
+                { code: '6313', name: '平顶山职业技术学院', major: '产品艺术设计', majorCode: '01' }
+            ];
+
+            const result = [];
+            pdfItems.forEach((item, index) => {
+                const key = item.name + '_' + item.major + '_' + item.majorCode;
+                const info = schoolInfo[item.name] || { tag: '', level: '', district: '' };
+                const city = cityMap[item.name] || '';
+                const plan = planMap[key] || '-';
+                const score = scoreMap[key] || '-';
+
+                // 使用新的分组逻辑
+                const group = getGroupInfo(city, item.name);
+
+                let tag = info.tag || '';
+                let level = info.level || '';
+                if (item.name === '武汉商贸职业学院') { tag = '民办'; }
+
+                result.push({
+                    code: item.code,
+                    name: item.name,
+                    major: item.major,
+                    majorCode: item.majorCode,
+                    city: city,
+                    district: info.district || '-',
+                    scoreDisplay: score,
+                    fee: item.name === '武汉商贸职业学院' ? '12800' : (item.name === '开封大学' && item.major === '服装与服饰设计' ? '6600' : '6000'),
+                    tag: tag || '-',
+                    level: level || '-',
+                    plan: plan,
+                    groupKey: group.key,
+                    groupLabel: group.label,
+                    cityClass: group.cls,
+                    uid: 'pdf_' + String(index + 1).padStart(3, '0') + '_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4)
+                });
+            });
+
+            return result;
+        }
+
+        // ===== 数据加载与渲染 =====
+        let currentItems = [];
+
+        function loadData() {
+            currentItems = buildPDFOrderData();
+            renderTable();
+        }
+
+        function renderTable() {
+            const container = document.getElementById('viewContainer');
+            if (!container) return;
+
+            const groupMap = {};
+            const groupOrder = ['wuhan', 'zhengzhou', 'kaifeng', 'xinyang', 'other'];
+
+            currentItems.forEach(item => {
+                const key = item.groupKey || 'other';
+                if (!groupMap[key]) {
+                    groupMap[key] = {
+                        label: item.groupLabel || '📍 其他城市',
+                        cityClass: item.cityClass || 'city-other',
+                        items: []
+                    };
                 }
-            </style>
-        </head>
-        <body>
-        <div class="container">
-            <div class="card-header">
-                <h2>🎨 美术与设计类 · 志愿表（导出版）</h2>
-                <span class="badge-count">64 条</span>
-            </div>
-            <div id="exportContent"><table><thead><tr><th style="width:30px;min-width:30px;">#</th><th style="width:30px;min-width:30px;">↕</th><th>院校代码</th><th>院校名称</th><th>专业名称</th><th>专业代码</th><th>城市</th><th>所在区</th><th>录取分数</th><th>学费(元/年)</th><th>院校标签</th><th>院校水平</th><th style="width:50px;min-width:50px;">操作</th></tr></thead><tbody id="sortable-wuhan"><tr data-uid="8849_01_1783243455115_c1wf" data-group="wuhan" data-index="0"><td class="row-order">1</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>8849</td><td>武汉船舶职业技术学院</td><td>视觉传达设计</td><td>01</td><td>武汉</td><td class="district-cell">汉阳区</td><td class="score-cell">421.75</td><td class="fee-cell">6500</td><td class="tag-cell"><span class="tag tag-highlight">高水平学校C</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('8849_01_1783243455115_c1wf')" title="删除此行">✕</button></td></tr><tr data-uid="8849_02_1783243455115_w3u4" data-group="wuhan" data-index="1"><td class="row-order">2</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>8849</td><td>武汉船舶职业技术学院</td><td>产品艺术设计</td><td>02</td><td>武汉</td><td class="district-cell">汉阳区</td><td class="score-cell">415.75</td><td class="fee-cell">6500</td><td class="tag-cell"><span class="tag tag-highlight">高水平学校C</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('8849_02_1783243455115_w3u4')" title="删除此行">✕</button></td></tr><tr data-uid="8849_03_1783243455115_dimm" data-group="wuhan" data-index="2"><td class="row-order">3</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>8849</td><td>武汉船舶职业技术学院</td><td>环境艺术设计</td><td>03</td><td>武汉</td><td class="district-cell">汉阳区</td><td class="score-cell">403.5</td><td class="fee-cell">6500</td><td class="tag-cell"><span class="tag tag-highlight">高水平学校C</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('8849_03_1783243455115_dimm')" title="删除此行">✕</button></td></tr><tr data-uid="8852_01_1783243455115_8k52" data-group="wuhan" data-index="3"><td class="row-order">4</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>8852</td><td>武汉警官职业学院</td><td>摄影摄像技术</td><td>01</td><td>武汉</td><td class="district-cell">东西湖区</td><td class="score-cell">404.5</td><td class="fee-cell">6500</td><td class="tag-cell"><span class="tag tag-highlight">省属</span></td><td class="tag-cell"><span class="tag tag-level">省属</span></td><td><button class="delete-btn" onclick="deleteRow('8852_01_1783243455115_8k52')" title="删除此行">✕</button></td></tr><tr data-uid="9784_01_1783243455115_gmj2" data-group="wuhan" data-index="4"><td class="row-order">5</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>9784</td><td>湖北生态工程职业技术学院</td><td>艺术设计</td><td>01</td><td>武汉</td><td class="district-cell">江夏区</td><td class="score-cell">408.75</td><td class="fee-cell">6500</td><td class="tag-cell"><span class="tag tag-highlight">省属</span></td><td class="tag-cell"><span class="tag tag-level">省属</span></td><td><button class="delete-btn" onclick="deleteRow('9784_01_1783243455115_gmj2')" title="删除此行">✕</button></td></tr><tr data-uid="8847_01_1783243455115_cewk" data-group="wuhan" data-index="5"><td class="row-order">6</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>8847</td><td>湖北交通职业技术学院</td><td>环境艺术设计</td><td>01</td><td>武汉</td><td class="district-cell">洪山区</td><td class="score-cell">404.25</td><td class="fee-cell">6500</td><td class="tag-cell"><span class="tag tag-highlight">高水平专业群C</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('8847_01_1783243455115_cewk')" title="删除此行">✕</button></td></tr><tr data-uid="9782_01_1783243455115_rtnm" data-group="wuhan" data-index="6"><td class="row-order">7</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>9782</td><td>湖北国土资源职业学院</td><td>数字媒体艺术设计</td><td>01</td><td>武汉</td><td class="district-cell">汉南区</td><td class="score-cell">426.5</td><td class="fee-cell">6500</td><td class="tag-cell"><span class="tag tag-highlight">省属</span></td><td class="tag-cell"><span class="tag tag-level">省属</span></td><td><button class="delete-btn" onclick="deleteRow('9782_01_1783243455115_rtnm')" title="删除此行">✕</button></td></tr></tbody></table><table><thead><tr><th style="width:30px;min-width:30px;">#</th><th style="width:30px;min-width:30px;">↕</th><th>院校代码</th><th>院校名称</th><th>专业名称</th><th>专业代码</th><th>城市</th><th>所在区</th><th>录取分数</th><th>学费(元/年)</th><th>院校标签</th><th>院校水平</th><th style="width:50px;min-width:50px;">操作</th></tr></thead><tbody id="sortable-zhengzhou"><tr data-uid="6261_02_1783243455115_s25v" data-group="zhengzhou" data-index="7"><td class="row-order">8</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6261</td><td>河南职业技术学院</td><td>产品艺术设计</td><td>02</td><td>郑州</td><td class="district-cell">金水区</td><td class="score-cell">432.75</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-highlight">高水平专业群B</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('6261_02_1783243455115_s25v')" title="删除此行">✕</button></td></tr><tr data-uid="6289_02_1783243455115_g3yd" data-group="zhengzhou" data-index="8"><td class="row-order">9</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6289</td><td>河南工业贸易职业学院</td><td>数字媒体艺术设计</td><td>02</td><td>郑州</td><td class="district-cell">管城回族区</td><td class="score-cell">412.5</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-highlight">省属</span></td><td class="tag-cell"><span class="tag tag-level">省属</span></td><td><button class="delete-btn" onclick="deleteRow('6289_02_1783243455115_g3yd')" title="删除此行">✕</button></td></tr><tr data-uid="6231_02_1783243455115_15n7" data-group="zhengzhou" data-index="9"><td class="row-order">10</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6231</td><td>郑州幼儿师范高等专科学校</td><td>数字媒体艺术设计</td><td>02</td><td>郑州</td><td class="district-cell">郑东新区</td><td class="score-cell">386.5</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-highlight">省属</span></td><td class="tag-cell"><span class="tag tag-level">省属</span></td><td><button class="delete-btn" onclick="deleteRow('6231_02_1783243455115_15n7')" title="删除此行">✕</button></td></tr><tr data-uid="6289_01_1783243455115_lott" data-group="zhengzhou" data-index="22" style="" draggable="false" class=""><td class="row-order">11</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6289</td><td>河南工业贸易职业学院</td><td>视觉传达设计</td><td>01</td><td>郑州</td><td class="district-cell">管城回族区</td><td class="score-cell">404.5</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-highlight">省属</span></td><td class="tag-cell"><span class="tag tag-level">省属</span></td><td><button class="delete-btn" onclick="deleteRow('6289_01_1783243455115_lott')" title="删除此行">✕</button></td></tr><tr data-uid="6320_01_1783243455115_it7u" data-group="zhengzhou" data-index="10" style=""><td class="row-order">12</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6320</td><td>河南测绘职业学院</td><td>视觉传达设计</td><td>01</td><td>郑州</td><td class="district-cell">郑东新区</td><td class="score-cell">384.5</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-highlight">省属</span></td><td class="tag-cell"><span class="tag tag-level">省属</span></td><td><button class="delete-btn" onclick="deleteRow('6320_01_1783243455115_it7u')" title="删除此行">✕</button></td></tr><tr data-uid="6290_09_1783243455115_4lwa" data-group="zhengzhou" data-index="11" style=""><td class="row-order">13</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6290</td><td>河南艺术职业学院</td><td>游戏艺术设计</td><td>09</td><td>郑州</td><td class="district-cell">郑东新区</td><td class="score-cell">417.25</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-highlight">省属</span></td><td class="tag-cell"><span class="tag tag-level">省属</span></td><td><button class="delete-btn" onclick="deleteRow('6290_09_1783243455115_4lwa')" title="删除此行">✕</button></td></tr><tr data-uid="6290_25_1783243455115_3fps" data-group="zhengzhou" data-index="12" style=""><td class="row-order">14</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6290</td><td>河南艺术职业学院</td><td>影视动画</td><td>25</td><td>郑州</td><td class="district-cell">郑东新区</td><td class="score-cell">413.75</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-highlight">省属</span></td><td class="tag-cell"><span class="tag tag-level">省属</span></td><td><button class="delete-btn" onclick="deleteRow('6290_25_1783243455115_3fps')" title="删除此行">✕</button></td></tr><tr data-uid="6289_03_1783243455115_g5ku" data-group="zhengzhou" data-index="14" draggable="false" class="" style=""><td class="row-order">15</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6289</td><td>河南工业贸易职业学院</td><td>工艺美术品设计</td><td>03</td><td>郑州</td><td class="district-cell">管城回族区</td><td class="score-cell">394.5</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-highlight">省属</span></td><td class="tag-cell"><span class="tag tag-level">省属</span></td><td><button class="delete-btn" onclick="deleteRow('6289_03_1783243455115_g5ku')" title="删除此行">✕</button></td></tr><tr data-uid="6290_23_1783243455115_bqf2" data-group="zhengzhou" data-index="21" style="" draggable="false" class=""><td class="row-order">16</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6290</td><td>河南艺术职业学院</td><td>舞台艺术设计与制作</td><td>23</td><td>郑州</td><td class="district-cell">郑东新区</td><td class="score-cell">392.5</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-highlight">省属</span></td><td class="tag-cell"><span class="tag tag-level">省属</span></td><td><button class="delete-btn" onclick="deleteRow('6290_23_1783243455115_bqf2')" title="删除此行">✕</button></td></tr><tr data-uid="6215_03_1783243455115_6b51" data-group="zhengzhou" data-index="13" draggable="false" class="" style=""><td class="row-order">17</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6215</td><td>河南财政金融学院</td><td>摄影摄像技术</td><td>03</td><td>郑州</td><td class="district-cell">郑东新区</td><td class="score-cell">425</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-highlight">省属</span></td><td class="tag-cell"><span class="tag tag-level">省属</span></td><td><button class="delete-btn" onclick="deleteRow('6215_03_1783243455115_6b51')" title="删除此行">✕</button></td></tr><tr data-uid="6290_05_1783243455115_z0b5" data-group="zhengzhou" data-index="19" style="" draggable="false" class=""><td class="row-order">18</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6290</td><td>河南艺术职业学院</td><td>环境艺术设计</td><td>05</td><td>郑州</td><td class="district-cell">郑东新区</td><td class="score-cell">408.5</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-highlight">省属</span></td><td class="tag-cell"><span class="tag tag-level">省属</span></td><td><button class="delete-btn" onclick="deleteRow('6290_05_1783243455115_z0b5')" title="删除此行">✕</button></td></tr><tr data-uid="6269_01_1783243455115_8ypa" data-group="zhengzhou" data-index="17" style="" draggable="false" class=""><td class="row-order">19</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6269</td><td>河南建筑职业技术学院</td><td>环境艺术设计</td><td>01</td><td>郑州</td><td class="district-cell">二七区</td><td class="score-cell">394.75</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-highlight">省属</span></td><td class="tag-cell"><span class="tag tag-level">省属</span></td><td><button class="delete-btn" onclick="deleteRow('6269_01_1783243455115_8ypa')" title="删除此行">✕</button></td></tr><tr data-uid="6382_03_1783243455115_jxfj" data-group="zhengzhou" data-index="23" draggable="false" class="" style=""><td class="row-order">20</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6382</td><td>河南机电职业学院</td><td>动漫设计</td><td>03</td><td>郑州</td><td class="district-cell">新郑市</td><td class="score-cell">379</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-highlight">省属</span></td><td class="tag-cell"><span class="tag tag-level">省属</span></td><td><button class="delete-btn" onclick="deleteRow('6382_03_1783243455115_jxfj')" title="删除此行">✕</button></td></tr><tr data-uid="6382_02_1783243455115_4a6w" data-group="zhengzhou" data-index="16" style="" draggable="false" class=""><td class="row-order">21</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6382</td><td>河南机电职业学院</td><td>环境艺术设计</td><td>02</td><td>郑州</td><td class="district-cell">新郑市</td><td class="score-cell">381.75</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-highlight">省属</span></td><td class="tag-cell"><span class="tag tag-level">省属</span></td><td><button class="delete-btn" onclick="deleteRow('6382_02_1783243455115_4a6w')" title="删除此行">✕</button></td></tr><tr data-uid="6290_11_1783243455115_g6b2" data-group="zhengzhou" data-index="18" style="" draggable="false" class=""><td class="row-order">22</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6290</td><td>河南艺术职业学院</td><td>广告艺术设计</td><td>11</td><td>郑州</td><td class="district-cell">郑东新区</td><td class="score-cell">423.25</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-highlight">省属</span></td><td class="tag-cell"><span class="tag tag-level">省属</span></td><td><button class="delete-btn" onclick="deleteRow('6290_11_1783243455115_g6b2')" title="删除此行">✕</button></td></tr><tr data-uid="6382_01_1783243455115_3jra" data-group="zhengzhou" data-index="24" draggable="false" class="" style=""><td class="row-order">23</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6382</td><td>河南机电职业学院</td><td>产品艺术设计</td><td>01</td><td>郑州</td><td class="district-cell">新郑市</td><td class="score-cell">384.5</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-highlight">省属</span></td><td class="tag-cell"><span class="tag tag-level">省属</span></td><td><button class="delete-btn" onclick="deleteRow('6382_01_1783243455115_3jra')" title="删除此行">✕</button></td></tr><tr data-uid="6290_12_1783243455115_it89" data-group="zhengzhou" data-index="20" style="" draggable="false" class=""><td class="row-order">24</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6290</td><td>河南艺术职业学院</td><td>人物形象设计</td><td>12</td><td>郑州</td><td class="district-cell">郑东新区</td><td class="score-cell">407.25</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-highlight">省属</span></td><td class="tag-cell"><span class="tag tag-level">省属</span></td><td><button class="delete-btn" onclick="deleteRow('6290_12_1783243455115_it89')" title="删除此行">✕</button></td></tr><tr data-uid="6184_02_1783243455115_9vf6" data-group="zhengzhou" data-index="25" style=""><td class="row-order">25</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6184</td><td>河南轻工职业学院</td><td>视觉传达设计</td><td>02</td><td>郑州</td><td class="district-cell">金水区</td><td class="score-cell">429</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('6184_02_1783243455115_9vf6')" title="删除此行">✕</button></td></tr><tr data-uid="6184_01_1783243455115_dl1u" data-group="zhengzhou" data-index="26" style=""><td class="row-order">26</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6184</td><td>河南轻工职业学院</td><td>艺术设计</td><td>01</td><td>郑州</td><td class="district-cell">金水区</td><td class="score-cell">412</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('6184_01_1783243455115_dl1u')" title="删除此行">✕</button></td></tr><tr data-uid="6184_06_1783243455115_vskz" data-group="zhengzhou" data-index="27" style=""><td class="row-order">27</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6184</td><td>河南轻工职业学院</td><td>产品艺术设计</td><td>06</td><td>郑州</td><td class="district-cell">金水区</td><td class="score-cell">400.25</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('6184_06_1783243455115_vskz')" title="删除此行">✕</button></td></tr><tr data-uid="6184_10_1783243455115_ew9e" data-group="zhengzhou" data-index="31" style=""><td class="row-order">28</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6184</td><td>河南轻工职业学院</td><td>工艺美术品设计</td><td>10</td><td>郑州</td><td class="district-cell">金水区</td><td class="score-cell">369.5</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('6184_10_1783243455115_ew9e')" title="删除此行">✕</button></td></tr><tr data-uid="6184_08_1783243455115_aflj" data-group="zhengzhou" data-index="29" style="" draggable="false" class=""><td class="row-order">29</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6184</td><td>河南轻工职业学院</td><td>公共艺术设计</td><td>08</td><td>郑州</td><td class="district-cell">金水区</td><td class="score-cell">388</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('6184_08_1783243455115_aflj')" title="删除此行">✕</button></td></tr><tr data-uid="6184_09_1783243455115_sj7s" data-group="zhengzhou" data-index="33" style=""><td class="row-order">30</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6184</td><td>河南轻工职业学院</td><td>展示艺术设计</td><td>09</td><td>郑州</td><td class="district-cell">金水区</td><td class="score-cell">345.25</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('6184_09_1783243455115_sj7s')" title="删除此行">✕</button></td></tr><tr data-uid="6184_11_1783243455115_yiy1" data-group="zhengzhou" data-index="30" draggable="false" class="" style=""><td class="row-order">31</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6184</td><td>河南轻工职业学院</td><td>广告艺术设计</td><td>11</td><td>郑州</td><td class="district-cell">金水区</td><td class="score-cell">388</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('6184_11_1783243455115_yiy1')" title="删除此行">✕</button></td></tr><tr data-uid="6289_04_1783243455115_newa" data-group="zhengzhou" data-index="15" style="" draggable="false" class=""><td class="row-order">32</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6289</td><td>河南工业贸易职业学院</td><td>广告艺术设计</td><td>04</td><td>郑州</td><td class="district-cell">管城回族区</td><td class="score-cell">358</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-highlight">省属</span></td><td class="tag-cell"><span class="tag tag-level">省属</span></td><td><button class="delete-btn" onclick="deleteRow('6289_04_1783243455115_newa')" title="删除此行">✕</button></td></tr><tr data-uid="6184_07_1783243455115_lm40" data-group="zhengzhou" data-index="28" draggable="false" class="" style=""><td class="row-order">33</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6184</td><td>河南轻工职业学院</td><td>环境艺术设计</td><td>07</td><td>郑州</td><td class="district-cell">金水区</td><td class="score-cell">388</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('6184_07_1783243455115_lm40')" title="删除此行">✕</button></td></tr><tr data-uid="6285_01_1783243455115_456s" data-group="zhengzhou" data-index="35" style="" draggable="false" class=""><td class="row-order">34</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6285</td><td>郑州职业技术学院</td><td>环境艺术设计</td><td>01</td><td>郑州</td><td class="district-cell">荥阳市</td><td class="score-cell">384.5</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('6285_01_1783243455115_456s')" title="删除此行">✕</button></td></tr><tr data-uid="6540_01_1783243455115_9tv3" data-group="zhengzhou" data-index="37" style="" draggable="false" class=""><td class="row-order">35</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6540</td><td>河南地矿职业学院</td><td>环境艺术设计</td><td>01</td><td>郑州</td><td class="district-cell">郑东新区</td><td class="score-cell">342</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('6540_01_1783243455115_9tv3')" title="删除此行">✕</button></td></tr><tr data-uid="6184_12_1783243455115_vnoo" data-group="zhengzhou" data-index="32" style="" draggable="false" class=""><td class="row-order">36</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6184</td><td>河南轻工职业学院</td><td>室内艺术设计</td><td>12</td><td>郑州</td><td class="district-cell">金水区</td><td class="score-cell">369.25</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('6184_12_1783243455115_vnoo')" title="删除此行">✕</button></td></tr><tr data-uid="6186_02_1783243455115_1ang" data-group="zhengzhou" data-index="36" style="" draggable="false" class=""><td class="row-order">37</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6186</td><td>河南信息统计职业学院</td><td>室内艺术设计</td><td>02</td><td>郑州</td><td class="district-cell">郑东新区</td><td class="score-cell">342.5</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('6186_02_1783243455115_1ang')" title="删除此行">✕</button></td></tr><tr data-uid="6285_03_1783243455115_wyvl" data-group="zhengzhou" data-index="34" draggable="false" class="" style=""><td class="row-order">38</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6285</td><td>郑州职业技术学院</td><td>人物形象设计</td><td>03</td><td>郑州</td><td class="district-cell">荥阳市</td><td class="score-cell">394</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('6285_03_1783243455115_wyvl')" title="删除此行">✕</button></td></tr></tbody></table><table><thead><tr><th style="width:30px;min-width:30px;">#</th><th style="width:30px;min-width:30px;">↕</th><th>院校代码</th><th>院校名称</th><th>专业名称</th><th>专业代码</th><th>城市</th><th>所在区</th><th>录取分数</th><th>学费(元/年)</th><th>院校标签</th><th>院校水平</th><th style="width:50px;min-width:50px;">操作</th></tr></thead><tbody id="sortable-kaifeng"><tr data-uid="6252_01_1783243455115_i222" data-group="kaifeng" data-index="38"><td class="row-order">39</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6252</td><td>开封大学</td><td>视觉传达设计</td><td>01</td><td>开封</td><td class="district-cell">龙亭区</td><td class="score-cell">433.75</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-highlight">省重点</span></td><td class="tag-cell"><span class="tag tag-level">省重点</span></td><td><button class="delete-btn" onclick="deleteRow('6252_01_1783243455115_i222')" title="删除此行">✕</button></td></tr><tr data-uid="6252_03_1783243455115_wnrz" data-group="kaifeng" data-index="39"><td class="row-order">40</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6252</td><td>开封大学</td><td>环境艺术设计</td><td>03</td><td>开封</td><td class="district-cell">龙亭区</td><td class="score-cell">418.5</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-highlight">省重点</span></td><td class="tag-cell"><span class="tag tag-level">省重点</span></td><td><button class="delete-btn" onclick="deleteRow('6252_03_1783243455115_wnrz')" title="删除此行">✕</button></td></tr><tr data-uid="6252_02_1783243455115_0ke2" data-group="kaifeng" data-index="40"><td class="row-order">41</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6252</td><td>开封大学</td><td>服装与服饰设计</td><td>02</td><td>开封</td><td class="district-cell">龙亭区</td><td class="score-cell">418</td><td class="fee-cell">6600</td><td class="tag-cell"><span class="tag tag-highlight">省重点</span></td><td class="tag-cell"><span class="tag tag-level">省重点</span></td><td><button class="delete-btn" onclick="deleteRow('6252_02_1783243455115_0ke2')" title="删除此行">✕</button></td></tr><tr data-uid="6316_02_1783243455115_tc6y" data-group="kaifeng" data-index="41"><td class="row-order">42</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6316</td><td>开封文化艺术职业学院</td><td>工艺美术品设计</td><td>02</td><td>开封</td><td class="district-cell">龙亭区</td><td class="score-cell">335.25</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-highlight">省属</span></td><td class="tag-cell"><span class="tag tag-level">省属</span></td><td><button class="delete-btn" onclick="deleteRow('6316_02_1783243455115_tc6y')" title="删除此行">✕</button></td></tr></tbody></table><table><thead><tr><th style="width:30px;min-width:30px;">#</th><th style="width:30px;min-width:30px;">↕</th><th>院校代码</th><th>院校名称</th><th>专业名称</th><th>专业代码</th><th>城市</th><th>所在区</th><th>录取分数</th><th>学费(元/年)</th><th>院校标签</th><th>院校水平</th><th style="width:50px;min-width:50px;">操作</th></tr></thead><tbody id="sortable-xinyang"><tr data-uid="6145_05_1783243455115_m9ye" data-group="xinyang" data-index="42"><td class="row-order">43</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6145</td><td>信阳农林学院</td><td>数字媒体艺术设计</td><td>05</td><td>信阳</td><td class="district-cell">平桥区</td><td class="score-cell">424</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-highlight">省属</span></td><td class="tag-cell"><span class="tag tag-level">省属</span></td><td><button class="delete-btn" onclick="deleteRow('6145_05_1783243455115_m9ye')" title="删除此行">✕</button></td></tr><tr data-uid="6365_02_1783243455115_5yi3" data-group="xinyang" data-index="43"><td class="row-order">44</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6365</td><td>信阳艺术职业学院</td><td>数字媒体艺术设计</td><td>02</td><td>信阳</td><td class="district-cell">平桥区</td><td class="score-cell">399</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('6365_02_1783243455115_5yi3')" title="删除此行">✕</button></td></tr><tr data-uid="6145_04_1783243455115_pcun" data-group="xinyang" data-index="44"><td class="row-order">45</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6145</td><td>信阳农林学院</td><td>艺术设计</td><td>04</td><td>信阳</td><td class="district-cell">平桥区</td><td class="score-cell">415.5</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-highlight">省属</span></td><td class="tag-cell"><span class="tag tag-level">省属</span></td><td><button class="delete-btn" onclick="deleteRow('6145_04_1783243455115_pcun')" title="删除此行">✕</button></td></tr><tr data-uid="6365_01_1783243455115_ehzh" data-group="xinyang" data-index="45"><td class="row-order">46</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6365</td><td>信阳艺术职业学院</td><td>艺术设计</td><td>01</td><td>信阳</td><td class="district-cell">平桥区</td><td class="score-cell">391</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('6365_01_1783243455115_ehzh')" title="删除此行">✕</button></td></tr><tr data-uid="6365_03_1783243455115_qfws" data-group="xinyang" data-index="46"><td class="row-order">47</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6365</td><td>信阳艺术职业学院</td><td>书画艺术</td><td>03</td><td>信阳</td><td class="district-cell">平桥区</td><td class="score-cell">363.5</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('6365_03_1783243455115_qfws')" title="删除此行">✕</button></td></tr></tbody></table><table><thead><tr><th style="width:30px;min-width:30px;">#</th><th style="width:30px;min-width:30px;">↕</th><th>院校代码</th><th>院校名称</th><th>专业名称</th><th>专业代码</th><th>城市</th><th>所在区</th><th>录取分数</th><th>学费(元/年)</th><th>院校标签</th><th>院校水平</th><th style="width:50px;min-width:50px;">操作</th></tr></thead><tbody id="sortable-other"><tr data-uid="6188_05_1783243455115_xc14" data-group="other" data-index="47"><td class="row-order">48</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6188</td><td>河南林业职业学院</td><td>动漫设计</td><td>05</td><td>洛阳市</td><td class="district-cell">瀍河区</td><td class="score-cell">407.25</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-highlight">省属</span></td><td class="tag-cell"><span class="tag tag-level">省属</span></td><td><button class="delete-btn" onclick="deleteRow('6188_05_1783243455115_xc14')" title="删除此行">✕</button></td></tr><tr data-uid="6188_03_1783243455115_uvgj" data-group="other" data-index="48"><td class="row-order">49</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6188</td><td>河南林业职业学院</td><td>环境艺术设计</td><td>03</td><td>洛阳市</td><td class="district-cell">瀍河区</td><td class="score-cell">402.5</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-highlight">省属</span></td><td class="tag-cell"><span class="tag tag-level">省属</span></td><td><button class="delete-btn" onclick="deleteRow('6188_03_1783243455115_uvgj')" title="删除此行">✕</button></td></tr><tr data-uid="6354_01_1783243455115_kssv" data-group="other" data-index="51" style=""><td class="row-order">50</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6354</td><td>河南对外经济贸易职业学院</td><td>视觉传达设计</td><td>01</td><td>开封市</td><td class="district-cell">龙亭区</td><td class="score-cell">370.5</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('6354_01_1783243455115_kssv')" title="删除此行">✕</button></td></tr><tr data-uid="6357_01_1783243455115_1lu3" data-group="other" data-index="53" style=""><td class="row-order">51</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6357</td><td>兰考三农职业学院</td><td>产品艺术设计</td><td>01</td><td>开封市兰考县</td><td class="district-cell">兰考县</td><td class="score-cell">368.5</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('6357_01_1783243455115_1lu3')" title="删除此行">✕</button></td></tr><tr data-uid="6363_02_1783243455115_sj38" data-group="other" data-index="54" style=""><td class="row-order">52</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6363</td><td>洛阳文化旅游职业学院</td><td>视觉传达设计</td><td>02</td><td>洛阳市</td><td class="district-cell">洛阳市</td><td class="score-cell">355.25</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('6363_02_1783243455115_sj38')" title="删除此行">✕</button></td></tr><tr data-uid="6363_03_1783243455115_vqd2" data-group="other" data-index="55" style=""><td class="row-order">53</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6363</td><td>洛阳文化旅游职业学院</td><td>视觉传达设计</td><td>03</td><td>洛阳市</td><td class="district-cell">洛阳市</td><td class="score-cell">355.25</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('6363_03_1783243455115_vqd2')" title="删除此行">✕</button></td></tr><tr data-uid="6363_01_1783243455115_jwr4" data-group="other" data-index="56" style=""><td class="row-order">54</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6363</td><td>洛阳文化旅游职业学院</td><td>艺术设计</td><td>01</td><td>洛阳市</td><td class="district-cell">洛阳市</td><td class="score-cell">357.5</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('6363_01_1783243455115_jwr4')" title="删除此行">✕</button></td></tr><tr data-uid="6380_01_1783243455115_x11y" data-group="other" data-index="49" draggable="false" class="" style=""><td class="row-order">55</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6380</td><td>南阳农业职业学院</td><td>艺术设计</td><td>01</td><td>南阳市</td><td class="district-cell">南阳市</td><td class="score-cell">329.5</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-highlight">省属</span></td><td class="tag-cell"><span class="tag tag-level">省属</span></td><td><button class="delete-btn" onclick="deleteRow('6380_01_1783243455115_x11y')" title="删除此行">✕</button></td></tr><tr data-uid="6539_01_1783243455115_zz7g" data-group="other" data-index="52" style="" draggable="false" class=""><td class="row-order">56</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6539</td><td>河南物流职业学院</td><td>视觉传达设计</td><td>01</td><td>新乡市</td><td class="district-cell">新乡市</td><td class="score-cell">371.75</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('6539_01_1783243455115_zz7g')" title="删除此行">✕</button></td></tr><tr data-uid="6291_01_1783243455115_io0s" data-group="other" data-index="50" draggable="false" class="" style=""><td class="row-order">57</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6291</td><td>新乡职业技术学院</td><td>视觉传达设计</td><td>01</td><td>新乡市</td><td class="district-cell">新乡市</td><td class="score-cell">327</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-highlight">省属</span></td><td class="tag-cell"><span class="tag tag-level">省属</span></td><td><button class="delete-btn" onclick="deleteRow('6291_01_1783243455115_io0s')" title="删除此行">✕</button></td></tr><tr data-uid="8866_02_1783243455115_konr" data-group="other" data-index="62" style=""><td class="row-order">58</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>8866</td><td>武汉商贸职业学院</td><td>视觉传达设计</td><td>02</td><td>武汉市</td><td class="district-cell">洪山区</td><td class="score-cell">354.5</td><td class="fee-cell">12800</td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('8866_02_1783243455115_konr')" title="删除此行">✕</button></td></tr><tr data-uid="8866_03_1783243455115_06jw" data-group="other" data-index="63" style=""><td class="row-order">59</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>8866</td><td>武汉商贸职业学院</td><td>服装与服饰设计</td><td>03</td><td>武汉市</td><td class="district-cell">洪山区</td><td class="score-cell">345.75</td><td class="fee-cell">12800</td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('8866_03_1783243455115_06jw')" title="删除此行">✕</button></td></tr><tr data-uid="6368_03_1783243455115_jg8e" data-group="other" data-index="58" style="" draggable="false" class=""><td class="row-order">60</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6368</td><td>南阳工艺美术职业学院</td><td>数字媒体艺术设计</td><td>03</td><td>南阳市</td><td class="district-cell">南阳市</td><td class="score-cell">336</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('6368_03_1783243455115_jg8e')" title="删除此行">✕</button></td></tr><tr data-uid="6368_01_1783243455115_bjrq" data-group="other" data-index="57" draggable="false" class="" style=""><td class="row-order">61</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6368</td><td>南阳工艺美术职业学院</td><td>艺术设计</td><td>01</td><td>南阳市</td><td class="district-cell">南阳市</td><td class="score-cell">327.5</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('6368_01_1783243455115_bjrq')" title="删除此行">✕</button></td></tr><tr data-uid="6356_02_1783243455115_baza" data-group="other" data-index="60" style="" draggable="false" class=""><td class="row-order">62</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6356</td><td>南阳科技职业学院</td><td>视觉传达设计</td><td>02</td><td>南阳市</td><td class="district-cell">南阳市</td><td class="score-cell">363.75</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('6356_02_1783243455115_baza')" title="删除此行">✕</button></td></tr><tr data-uid="6356_01_1783243455115_5ums" data-group="other" data-index="59" style="" draggable="false" class=""><td class="row-order">63</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6356</td><td>南阳科技职业学院</td><td>艺术设计</td><td>01</td><td>南阳市</td><td class="district-cell">南阳市</td><td class="score-cell">362.5</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('6356_01_1783243455115_5ums')" title="删除此行">✕</button></td></tr><tr data-uid="6313_01_1783243455115_hg7b" data-group="other" data-index="61" draggable="false" class="" style=""><td class="row-order">64</td><td><span class="drag-handle" title="拖拽调整顺序">⋮⋮</span></td><td>6313</td><td>平顶山职业技术学院</td><td>产品艺术设计</td><td>01</td><td>平顶山市</td><td class="district-cell">平顶山市</td><td class="score-cell">315.75</td><td class="fee-cell">6000</td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td class="tag-cell"><span class="tag tag-normal">-</span></td><td><button class="delete-btn" onclick="deleteRow('6313_01_1783243455115_hg7b')" title="删除此行">✕</button></td></tr></tbody></table></div>
-            <div class="footer-note">📅 导出时间: 2026/7/5 18:08:31 · 共 64 条志愿</div>
-        </div>
-        </body>
-        </html>
+                groupMap[key].items.push(item);
+            });
+
+            let totalCount = 0;
+            let html = '';
+            let rowIndex = 0;
+
+            groupOrder.forEach(key => {
+                const group = groupMap[key];
+                if (!group || group.items.length === 0) return;
+                totalCount += group.items.length;
+
+                html += `<div class="city-group ${group.cityClass}">`;
+                html += `<div class="city-label">${group.label}</div>`;
+                html += `<div class="table-wrapper">`;
+                html += `<table><thead><tr>`;
+                html += `<th style="width:30px;min-width:30px;">#</th>`;
+                html += `<th>院校代码</th><th>院校名称</th><th>专业名称</th><th>专业代码</th><th>城市</th><th>所在区</th><th>计划数</th><th>录取分数</th><th>学费(元/年)</th><th>院校标签</th><th>院校水平</th>`;
+                html += `</tr></thead><tbody>`;
+
+                group.items.forEach((item) => {
+                    const tagDisplay = item.tag && item.tag !== '-' ? item.tag : '-';
+                    const levelDisplay = item.level && item.level !== '-' ? item.level : '-';
+                    const districtDisplay = item.district && item.district !== '-' ? item.district : '-';
+                    const cityDisplay = item.city || '';
+                    const planDisplay = item.plan !== '-' ? item.plan : '-';
+                    rowIndex++;
+                    html += `<tr>`;
+                    html += `<td class="row-order">${rowIndex}</td>`;
+                    html += `<td>${item.code}</td>`;
+                    html += `<td>${item.name}</td>`;
+                    html += `<td>${item.major}</td>`;
+                    html += `<td>${item.majorCode}</td>`;
+                    html += `<td>${cityDisplay}</td>`;
+                    html += `<td class="district-cell">${districtDisplay}</td>`;
+                    html += `<td class="plan-cell">${planDisplay}</td>`;
+                    html += `<td class="score-cell">${item.scoreDisplay}</td>`;
+                    html += `<td class="fee-cell">${item.fee}</td>`;
+                    html += `<td class="tag-cell">`;
+                    html += tagDisplay !== '-' ? `<span class="tag tag-highlight">${tagDisplay}</span>` :
+                        `<span class="tag tag-normal">-</span>`;
+                    html += `</td>`;
+                    html += `<td class="tag-cell">`;
+                    html += levelDisplay !== '-' ? `<span class="tag tag-level">${levelDisplay}</span>` :
+                        `<span class="tag tag-normal">-</span>`;
+                    html += `</td>`;
+                    html += `</tr>`;
+                });
+
+                html += `</tbody></table>`;
+                html += `</div></div>`;
+            });
+
+            container.innerHTML = html;
+            document.getElementById('countBadge').textContent = totalCount + ' 条';
+            document.getElementById('footerCount').textContent = totalCount;
+        }
+
+        // ===== 启动 =====
+        loadData();
+    })();
+</script>
+</body>
+</html>
